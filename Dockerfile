@@ -6,14 +6,6 @@ ENV DEBIAN_PRIORITY=high
 RUN apt-get update && \
   apt-get -y upgrade && \
   apt-get -y install \
-  # UI Requirements
-  xvfb \
-  xterm \
-  xdotool \
-  scrot \
-  imagemagick \
-  sudo \
-  mutter \
   # Python/pyenv reqs
   build-essential \
   libssl-dev  \
@@ -32,19 +24,7 @@ RUN apt-get update && \
   liblzma-dev \
   # Network tools
   net-tools \
-  netcat \
-  # PPA req
-  software-properties-common && \
-  # Userland apps
-  sudo apt-get install -y --no-install-recommends \
-  x11-apps \
-  xpdf \
-  gedit \
-  xpaint \
-  tint2 \
-  galculator \
-  pcmanfm \
-  unzip && \
+  netcat && \
   apt-get clean
 
 # setup user
@@ -78,12 +58,15 @@ RUN python -m pip install --upgrade pip==23.1.2 setuptools==58.0.4 wheel==0.40.0
   python -m pip config set global.disable-pip-version-check true
 
 # only reinstall if requirements.txt changes
-COPY --chown=$USERNAME:$USERNAME dev-requirements.txt $HOME/dev-requirements.txt
-RUN python -m pip install -r $HOME/dev-requirements.txt
+COPY --chown=$USERNAME:$USERNAME dev-requirements.txt $HOME/app/dev-requirements.txt
+RUN python -m pip install -r $HOME/app/dev-requirements.txt
 
 # setup desktop env & app
-COPY --chown=$USERNAME:$USERNAME image/ $HOME
-COPY --chown=$USERNAME:$USERNAME computer_use_demo/ $HOME/computer_use_demo/
+WORKDIR $HOME/app
+COPY --chown=$USERNAME:$USERNAME .env .env
+COPY --chown=$USERNAME:$USERNAME tools/ tools/
+COPY --chown=$USERNAME:$USERNAME app/ app/
+COPY --chown=$USERNAME:$USERNAME entrypoint.sh entrypoint.sh
 
 ARG DISPLAY_NUM=1
 ARG HEIGHT=768

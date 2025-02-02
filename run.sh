@@ -13,19 +13,21 @@ fi
 
 echo "Your ANTHROPIC_API_KEY is: $ANTHROPIC_API_KEY"
 
-existing_image=$(docker images -q computer-use-demo:local)
+existing_image=$(docker images -q claude-comp-use:local)
 if [ -z "$existing_image" ]; then
     # Build the Docker image
-    docker build . -t computer-use-demo:local
+    docker build . -t claude-comp-use:local || exit 1
 fi
+
+# Remove existing container
+docker rm -f comp-use
 
 # Run the Docker container
 docker run \
+    --rm \
     -e ANTHROPIC_API_KEY=$ANTHROPIC_API_KEY \
-    -v $(pwd):/home/computeruse/computer_use_demo/ \
-    -v $HOME/.anthropic:/home/computeruse/.anthropic \
-    -p 5900:5900 \
-    -p 8501:8501 \
-    -p 6080:6080 \
-    -p 8080:8080 \
-    -it computer-use-demo:local
+    -v $(pwd):/home/computeruse/app/ \
+    -v $HOME/.anthropic:/home/computeruse/app/.anthropic \
+    --name comp-use \
+    -it claude-comp-use:local \
+    /bin/bash

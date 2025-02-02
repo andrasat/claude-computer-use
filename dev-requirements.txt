@@ -1,11 +1,7 @@
 anthropic>=0.37.1
-boto3>=1.28.57
-browser-use==0.1.30
-google-auth<3,>=2
 jsonschema==4.22.0
 pre-commit==3.8.0
 pytest==8.3.3
 pytest-asyncio==0.23.6
 ruff==0.6.7
-streamlit>=1.38.0
 
