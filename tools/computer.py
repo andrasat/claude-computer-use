@@ -3,7 +3,7 @@ import base64
 import os
 import shlex
 import shutil
-from enum import StrEnum
+from enum import Enum
 from pathlib import Path
 from typing import Literal, TypedDict
 from uuid import uuid4
@@ -46,7 +46,7 @@ MAX_SCALING_TARGETS: dict[str, Resolution] = {
 }
 
 
-class ScalingSource(StrEnum):
+class ScalingSource(Enum):
     COMPUTER = "computer"
     API = "api"
 
